@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+
+{%block head%}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script> 
+	document.addEventListener('DOMContentLoaded', () =>{
+
+
+
+
+		var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+		const username = localStorage.getItem('username')
+		socket.on('connect', () => {
+		document.querySelector('#form').onsubmit = () => {
+
+
+			var currentDate = new Date();
+			var channela='{{channel|safe}}';
+			const request = new XMLHttpRequest();
+			const mesage = document.querySelector('#message').value;
+
+			var message = `${username} - ${mesage}     -   ${currentDate}`
+			/*var li = document.createElement('li');
+			li.innerHTML=message;
+			document.querySelector('#chat').append(li);*/
+			//var msg = "/handlmessage";
+			request.open("POST", "/handlmessage");
+
+			request.onload = () => {
+
+			const data = JSON.parse(request.responseText);
+			if (data.success){
+			var li = document.createElement('li');
+			li.innerHTML=message;
+			document.querySelector('#chat').append(li);}
+			else {document.querySelector('err').innerHTML="there was an error";}
+			};
+			socket.emit('submit message', {'message':message,"channel":channela});
+			const data = new FormData();
+			data.append("message", message);
+			data.append("channel",channela);
+			request.send(data);
+
+			    
+
+ 
+    }});
+
+
+			
+			
+			
+
+
+		socket.on('announce message', data =>{
+			if (data.channel == '{{channel|safe}}')
+			{var li = document.createElement('li');
+						li.innerHTML=data.msg;
+						document.querySelector('#chat').append(li);
+			}
+
+			
+			
+			
+		});
+
+
+
+		})
+</script>
+
+{%endblock%}
+
+
+{% block heading %}
+{% endblock %}
+
+
+
+{% block body %}
+
+
+{{channel}}
+<div>
+	<form id="form" >
+		
+		<input type="text" id="message">
+		<input type="submit">
+
+	</form>
+
+</div>
+
+<div>
+	chat
+<ul id="chat">
+	
+{%for row in chatdata%}
+<li>{{row}}</li>
+{% endfor%}
+</ul>
+</div>
+<h2 id="err"></h2>
+{% endblock %}

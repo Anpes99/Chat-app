@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+
+{%block head%}
+
+<script> 
+	document.addEventListener('DOMContentLoaded', () =>{
+		username={{username|safe}};
+		localStorage.setItem('username',username);
+		window.location.href = "/first";
+	}
+		)
+</script>
+
+{%endblock%}
+
+
+{% block heading %}
+{% endblock %}
+
+
+
+{% block body %}
+{% endblock %}

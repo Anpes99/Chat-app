@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+
+{%block head%}
+
+<script> 
+	document.addEventListener('DOMContentLoaded', () =>{
+		var channela={{channel|safe}};
+		var channelb = channela;
+		
+		
+		
+		let channels=[];
+		//var url = '/first/${channela}';
+		channels.push(channela);
+		
+		//request = new XMLHttpRequest();
+		//request.open("POST","/first/${channela}")
+		url = `/first/${channelb}`;
+		if (localStorage.getItem('channels') === null){
+			localStorage.setItem('channels',JSON.stringify(channels));
+			window.location.href = url;
+		}
+		else {
+			channels =JSON.parse(localStorage.getItem("channels"));
+			if (channels.includes(channela)){window.location.href = "/first";}
+			else {	
+					channels.push(channela);
+					localStorage.setItem('channels',JSON.stringify(channels));
+					window.location.href = url;
+				}}
+	}
+		)
+</script>
+
+{%endblock%}
+
+
+{% block heading %}
+{% endblock %}
+
+
+
+{% block body %}
+
+heloooo!!
+{% endblock %}
